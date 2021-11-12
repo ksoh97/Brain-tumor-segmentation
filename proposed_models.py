@@ -3,9 +3,6 @@ import tensorflow as tf
 import tensorflow.keras as keras
 import proposed_layers as layers
 
-# import os
-# os.environ["CUDA_VISIBLE_DEVICES"] = "7"
-
 class proposed_net:
     def __init__(self, ch, mode):
         self.mode, self.ch = mode, ch
