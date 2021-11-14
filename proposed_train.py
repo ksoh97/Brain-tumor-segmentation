@@ -8,12 +8,13 @@ import os
 import tqdm
 
 # main
-def train(dataloader, model, mode, lr, batch_size, decay, num_epochs, n_folds):
+def train(dataloader, model, mode, lr, batch_size, decay, num_epochs, n_folds, workspace):
     results = {}
     folds = KFold(n_splits = n_folds)
 
     fff = ["fold1", "fold2", "fold3", "fold4", "fold5"]
-    workspace="/DataCommon2/ksoh/perceptron_course/Brain_tumor_segmentation2/proposed_model" + "/" + "mode%d" % mode +"_1e-5"
+    # workspace = workspace + "/proposed_model" + "/" + "mode%d" % mode +"_1e-6_dice"
+    workspace = workspace + "/proposed_model" + "/" + "mode000" + "_1e-5_dice"
 
     # KFold Cross Validation
     for fold_, (trn_idx, val_idx) in enumerate(folds.split(dataloader)):
@@ -47,8 +48,8 @@ def train(dataloader, model, mode, lr, batch_size, decay, num_epochs, n_folds):
                 with tf.GradientTape() as tape:
                     logits = model({"in": features}, training=True)["out"]
                     dice_loss = DiceLoss(logits, targets)
-                    bce_loss = K.mean(tf.keras.losses.binary_crossentropy(logits, targets))
-                    total_loss = dice_loss + bce_loss
+                    # bce_loss = K.mean(tf.keras.losses.binary_crossentropy(logits, targets))
+                    total_loss = dice_loss
 
                 grads = tape.gradient(total_loss, train_vars)
                 optim.apply_gradients(zip(grads, train_vars))
@@ -71,8 +72,8 @@ def train(dataloader, model, mode, lr, batch_size, decay, num_epochs, n_folds):
 
                 logits = model({"in": features}, training=False)["out"]
                 dice_loss = DiceLoss(logits, targets)
-                bce_loss = tf.keras.losses.binary_crossentropy(logits, targets)
-                total_loss = dice_loss + bce_loss
+                # bce_loss = tf.keras.losses.binary_crossentropy(logits, targets)
+                total_loss = dice_loss
                 iou = iou_score(targets, logits)*100.0
 
                 ### LOGGING

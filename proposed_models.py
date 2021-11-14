@@ -3,6 +3,9 @@ import tensorflow as tf
 import tensorflow.keras as keras
 import proposed_layers as layers
 
+# import os
+# os.environ["CUDA_VISIBLE_DEVICES"] = "7"
+
 class proposed_net:
     def __init__(self, ch, mode):
         self.mode, self.ch = mode, ch
@@ -182,7 +185,97 @@ class proposed_net:
         return gc_mul
 
     def build_model(self):
-        if self.mode == 0:  # Unet
+        if self.mode == 0:  # Unet (mode0)
+            # enc_conv1_1 = self.conv_bn_act(self.input, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_1")
+            # enc_conv1_2 = self.conv_bn_act(enc_conv1_1, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_2")
+            # enc_pool1 = layers.maxpool(k=2, s=2, p="same", name="enc_pool1")(enc_conv1_2)
+            #
+            # enc_conv2_1 = self.conv_bn_act(enc_pool1, f=self.ch*2, k=3, s=1, p="same", act=True, n="enc_conv2_1")
+            # enc_conv2_2 = self.conv_bn_act(enc_conv2_1, f=self.ch*2, k=3, s=1, p="same", act=True, n="enc_conv2_2")
+            # enc_pool2 = layers.maxpool(k=2, s=2, p="same", name="enc_pool2")(enc_conv2_2)
+            #
+            # enc_conv3_1 = self.conv_bn_act(enc_pool2, f=self.ch*4, k=3, s=1, p="same", act=True, n="enc_conv3_1")
+            # enc_conv3_2 = self.conv_bn_act(enc_conv3_1, f=self.ch*4, k=3, s=1, p="same", act=True, n="enc_conv3_2")
+            # enc_pool3 = layers.maxpool(k=2, s=2, p="same", name="enc_pool3")(enc_conv3_2)
+            #
+            # enc_conv4_1 = self.conv_bn_act(enc_pool3, f=self.ch*8, k=3, s=1, p="same", act=True, n="enc_conv4_1")
+            # enc_conv4_2 = self.conv_bn_act(enc_conv4_1, f=self.ch*8, k=3, s=1, p="same", act=True, n="enc_conv4_2")
+            # enc_pool4 = layers.maxpool(k=2, s=2, p="same", name="enc_pool4")(enc_conv4_2)
+            #
+            # enc_conv5_1 = self.conv_bn_act(enc_pool4, f=self.ch*16, k=3, s=1, p="same", act=True, n="enc_conv5_1")
+            # enc_conv5_2 = self.conv_bn_act(enc_conv5_1, f=self.ch*16, k=3, s=1, p="same", act=True, n="enc_conv5_2")
+            #
+            # up_conv4 = self.conv_bn_act(enc_conv5_2, f=self.ch*8, k=2, s=2, p="valid", act=True, trans=True, n="up_conv4")
+            # concat4 = self.concat(enc_conv4_2, up_conv4, "concat4")
+            # dec_conv4_1 = self.conv_bn_act(concat4, f=self.ch*8, k=3, s=1, p="same", act=True, n="dec_conv4_1")
+            # dec_conv4_2 = self.conv_bn_act(dec_conv4_1, f=self.ch*8, k=3, s=1, p="same", act=True, n="dec_conv4_2")
+            #
+            # up_conv3 = self.conv_bn_act(dec_conv4_2, f=self.ch*4, k=2, s=2, p="valid", act=True, trans=True, n="up_conv3")
+            # concat3 = self.concat(enc_conv3_2, up_conv3, "concat3")
+            # dec_conv3_1 = self.conv_bn_act(concat3, f=self.ch*4, k=3, s=1, p="same", act=True, n="dec_conv3_1")
+            # dec_conv3_2 = self.conv_bn_act(dec_conv3_1, f=self.ch*4, k=3, s=1, p="same", act=True, n="dec_conv3_2")
+            #
+            # up_conv2 = self.conv_bn_act(dec_conv3_2, f=self.ch*2, k=2, s=2, p="valid", act=True, trans=True, n="up_conv2")
+            # concat2 = self.concat(enc_conv2_2, up_conv2, "concat2")
+            # dec_conv2_1 = self.conv_bn_act(concat2, f=self.ch*2, k=3, s=1, p="same", act=True, n="dec_conv2_1")
+            # dec_conv2_2 = self.conv_bn_act(dec_conv2_1, f=self.ch*2, k=3, s=1, p="same", act=True, n="dec_conv2_2")
+            #
+            # up_conv1 = self.conv_bn_act(dec_conv2_2, f=self.ch, k=2, s=2, p="valid", act=True, trans=True, n="up_conv1")
+            # concat1 = self.concat(enc_conv1_2, up_conv1, "concat1")
+            # dec_conv1_1 = self.conv_bn_act(concat1, self.ch, k=3, s=1, p="same", act=True, n="dec_conv1_1")
+            # dec_conv1_2 = self.conv_bn_act(dec_conv1_1, self.ch, k=3, s=1, p="same", act=True, n="dec_conv1_2")
+            #
+            # dec_out = self.conv_bn_act(dec_conv1_2, 1, k=1, s=1, p="same", batch=False, act=False, n="dec_out")
+            # dec_out = tf.sigmoid(dec_out)
+
+            # double-skip Unet (mode00)
+            # enc_conv1_1 = self.conv_bn_act(self.input, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_1")
+            # enc_conv1_2 = self.conv_bn_act(enc_conv1_1, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_2")
+            # enc_pool1 = layers.maxpool(k=2, s=2, p="same", name="enc_pool1")(enc_conv1_2)
+            #
+            # enc_conv2_1 = self.conv_bn_act(enc_pool1, f=self.ch*2, k=3, s=1, p="same", act=True, n="enc_conv2_1")
+            # enc_conv2_2 = self.conv_bn_act(enc_conv2_1, f=self.ch*2, k=3, s=1, p="same", act=True, n="enc_conv2_2")
+            # enc_pool2 = layers.maxpool(k=2, s=2, p="same", name="enc_pool2")(enc_conv2_2)
+            #
+            # enc_conv3_1 = self.conv_bn_act(enc_pool2, f=self.ch*4, k=3, s=1, p="same", act=True, n="enc_conv3_1")
+            # enc_conv3_2 = self.conv_bn_act(enc_conv3_1, f=self.ch*4, k=3, s=1, p="same", act=True, n="enc_conv3_2")
+            # enc_pool3 = layers.maxpool(k=2, s=2, p="same", name="enc_pool3")(enc_conv3_2)
+            #
+            # enc_conv4_1 = self.conv_bn_act(enc_pool3, f=self.ch*8, k=3, s=1, p="same", act=True, n="enc_conv4_1")
+            # enc_conv4_2 = self.conv_bn_act(enc_conv4_1, f=self.ch*8, k=3, s=1, p="same", act=True, n="enc_conv4_2")
+            # enc_pool4 = layers.maxpool(k=2, s=2, p="same", name="enc_pool4")(enc_conv4_2)
+            #
+            # enc_conv5_1 = self.conv_bn_act(enc_pool4, f=self.ch*16, k=3, s=1, p="same", act=True, n="enc_conv5_1")
+            # enc_conv5_2 = self.conv_bn_act(enc_conv5_1, f=self.ch*16, k=3, s=1, p="same", act=True, n="enc_conv5_2")
+            #
+            # up_conv4 = self.conv_bn_act(enc_conv5_2, f=self.ch*8, k=2, s=2, p="valid", act=True, trans=True, n="up_conv4")
+            # concat4_1 = self.concat(enc_conv4_2, up_conv4, "concat4_1")
+            # dec_conv4_1 = self.conv_bn_act(concat4_1, f=self.ch*8, k=3, s=1, p="same", act=True, n="dec_conv4_1")
+            # concat4_2 = self.concat(enc_conv4_2, dec_conv4_1, "concat4_2")
+            # dec_conv4_2 = self.conv_bn_act(concat4_2, f=self.ch*8, k=3, s=1, p="same", act=True, n="dec_conv4_2")
+            #
+            # up_conv3 = self.conv_bn_act(dec_conv4_2, f=self.ch*4, k=2, s=2, p="valid", act=True, trans=True, n="up_conv3")
+            # concat3_1 = self.concat(enc_conv3_2, up_conv3, "concat3_1")
+            # dec_conv3_1 = self.conv_bn_act(concat3_1, f=self.ch*4, k=3, s=1, p="same", act=True, n="dec_conv3_1")
+            # concat3_2 = self.concat(enc_conv3_2, dec_conv3_1, "concat3_2")
+            # dec_conv3_2 = self.conv_bn_act(concat3_2, f=self.ch*4, k=3, s=1, p="same", act=True, n="dec_conv3_2")
+            #
+            # up_conv2 = self.conv_bn_act(dec_conv3_2, f=self.ch*2, k=2, s=2, p="valid", act=True, trans=True, n="up_conv2")
+            # concat2_1 = self.concat(enc_conv2_2, up_conv2, "concat2_1")
+            # dec_conv2_1 = self.conv_bn_act(concat2_1, f=self.ch*2, k=3, s=1, p="same", act=True, n="dec_conv2_1")
+            # concat2_2 = self.concat(enc_conv2_2, dec_conv2_1, "concat2_2")
+            # dec_conv2_2 = self.conv_bn_act(concat2_2, f=self.ch*2, k=3, s=1, p="same", act=True, n="dec_conv2_2")
+            #
+            # up_conv1 = self.conv_bn_act(dec_conv2_2, f=self.ch, k=2, s=2, p="valid", act=True, trans=True, n="up_conv1")
+            # concat1_1 = self.concat(enc_conv1_2, up_conv1, "concat1_1")
+            # dec_conv1_1 = self.conv_bn_act(concat1_1, self.ch, k=3, s=1, p="same", act=True, n="dec_conv1_1")
+            # concat1_2 = self.concat(enc_conv1_2, dec_conv1_1, "concat1_2")
+            # dec_conv1_2 = self.conv_bn_act(concat1_2, self.ch, k=3, s=1, p="same", act=True, n="dec_conv1_2")
+            #
+            # dec_out = self.conv_bn_act(dec_conv1_2, 1, k=1, s=1, p="same", batch=False, act=False, n="dec_out")
+            # dec_out = tf.sigmoid(dec_out)
+
+            # up-sampling Unet (mode000)
             enc_conv1_1 = self.conv_bn_act(self.input, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_1")
             enc_conv1_2 = self.conv_bn_act(enc_conv1_1, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_2")
             enc_pool1 = layers.maxpool(k=2, s=2, p="same", name="enc_pool1")(enc_conv1_2)
@@ -202,22 +295,22 @@ class proposed_net:
             enc_conv5_1 = self.conv_bn_act(enc_pool4, f=self.ch*16, k=3, s=1, p="same", act=True, n="enc_conv5_1")
             enc_conv5_2 = self.conv_bn_act(enc_conv5_1, f=self.ch*16, k=3, s=1, p="same", act=True, n="enc_conv5_2")
 
-            up_conv4 = self.conv_bn_act(enc_conv5_2, f=self.ch*8, k=2, s=2, p="valid", act=True, trans=True, n="up_conv4")
+            up_conv4 = layers.upsample(rank=2, s=2, name="up4")(enc_conv5_2)
             concat4 = self.concat(enc_conv4_2, up_conv4, "concat4")
             dec_conv4_1 = self.conv_bn_act(concat4, f=self.ch*8, k=3, s=1, p="same", act=True, n="dec_conv4_1")
             dec_conv4_2 = self.conv_bn_act(dec_conv4_1, f=self.ch*8, k=3, s=1, p="same", act=True, n="dec_conv4_2")
 
-            up_conv3 = self.conv_bn_act(dec_conv4_2, f=self.ch*4, k=2, s=2, p="valid", act=True, trans=True, n="up_conv3")
+            up_conv3 = layers.upsample(rank=2, s=2, name="up3")(dec_conv4_2)
             concat3 = self.concat(enc_conv3_2, up_conv3, "concat3")
             dec_conv3_1 = self.conv_bn_act(concat3, f=self.ch*4, k=3, s=1, p="same", act=True, n="dec_conv3_1")
             dec_conv3_2 = self.conv_bn_act(dec_conv3_1, f=self.ch*4, k=3, s=1, p="same", act=True, n="dec_conv3_2")
 
-            up_conv2 = self.conv_bn_act(dec_conv3_2, f=self.ch*2, k=2, s=2, p="valid", act=True, trans=True, n="up_conv2")
+            up_conv2 = layers.upsample(rank=2, s=2, name="up2")(dec_conv3_2)
             concat2 = self.concat(enc_conv2_2, up_conv2, "concat2")
             dec_conv2_1 = self.conv_bn_act(concat2, f=self.ch*2, k=3, s=1, p="same", act=True, n="dec_conv2_1")
             dec_conv2_2 = self.conv_bn_act(dec_conv2_1, f=self.ch*2, k=3, s=1, p="same", act=True, n="dec_conv2_2")
 
-            up_conv1 = self.conv_bn_act(dec_conv2_2, f=self.ch, k=2, s=2, p="valid", act=True, trans=True, n="up_conv1")
+            up_conv1 = layers.upsample(rank=2, s=2, name="up1")(dec_conv2_2)
             concat1 = self.concat(enc_conv1_2, up_conv1, "concat1")
             dec_conv1_1 = self.conv_bn_act(concat1, self.ch, k=3, s=1, p="same", act=True, n="dec_conv1_1")
             dec_conv1_2 = self.conv_bn_act(dec_conv1_1, self.ch, k=3, s=1, p="same", act=True, n="dec_conv1_2")
