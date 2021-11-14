@@ -25,7 +25,7 @@ model_dict = {"Unet": 0, "Shallow_Unet": 1, "ResUnet": 2, "ResUnet_plusplus": 3}
 parser = argparse.ArgumentParser(description='Brain Tumor Segmentation')
 parser.add_argument('--mode', default=0, type=int,
                     help='perturbation magnitude')
-parser.add_argument('--trn_vs_eval', default=False, type=bool,
+parser.add_argument('--trn_vs_eval', default=True, type=bool,
                     help='perturbation magnitude')
 parser.add_argument('--input_channel', default=32, type=int,
                     help='perturbation magnitude')

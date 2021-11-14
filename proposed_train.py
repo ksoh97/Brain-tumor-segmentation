@@ -13,8 +13,7 @@ def train(dataloader, model, mode, lr, batch_size, decay, num_epochs, n_folds, w
     folds = KFold(n_splits = n_folds)
 
     fff = ["fold1", "fold2", "fold3", "fold4", "fold5"]
-    # workspace = workspace + "/proposed_model" + "/" + "mode%d" % mode +"_1e-6_dice"
-    workspace = workspace + "/proposed_model" + "/" + "mode000" + "_1e-5_dice"
+    workspace = workspace + "/proposed_model" + "/" + "mode%d" % mode +"_1e-6_dice"
 
     # KFold Cross Validation
     for fold_, (trn_idx, val_idx) in enumerate(folds.split(dataloader)):
@@ -48,8 +47,8 @@ def train(dataloader, model, mode, lr, batch_size, decay, num_epochs, n_folds, w
                 with tf.GradientTape() as tape:
                     logits = model({"in": features}, training=True)["out"]
                     dice_loss = DiceLoss(logits, targets)
-                    # bce_loss = K.mean(tf.keras.losses.binary_crossentropy(logits, targets))
-                    total_loss = dice_loss
+                    bce_loss = K.mean(tf.keras.losses.binary_crossentropy(logits, targets))
+                    total_loss = dice_loss + bce_loss
 
                 grads = tape.gradient(total_loss, train_vars)
                 optim.apply_gradients(zip(grads, train_vars))
@@ -67,13 +66,13 @@ def train(dataloader, model, mode, lr, batch_size, decay, num_epochs, n_folds, w
                           )
 
             ##Valid
-            for batch_idx, (features,targets) in enumerate(valid_dataloader):
+            for batch_idx, (features,targets) in enumerate(tqdm.tqdm(valid_dataloader)):
                 features, targets = tf.constant(features), tf.constant(targets)
 
                 logits = model({"in": features}, training=False)["out"]
                 dice_loss = DiceLoss(logits, targets)
-                # bce_loss = tf.keras.losses.binary_crossentropy(logits, targets)
-                total_loss = dice_loss
+                bce_loss = tf.keras.losses.binary_crossentropy(logits, targets)
+                total_loss = dice_loss + bce_loss
                 iou = iou_score(targets, logits)*100.0
 
                 ### LOGGING
@@ -84,7 +83,7 @@ def train(dataloader, model, mode, lr, batch_size, decay, num_epochs, n_folds, w
                   np.mean(valid_loss),
                   np.mean(valid_iou)))
 
-            # model save
+            ## model save
             if best_iou <= np.mean(valid_iou):
                 best_iou = np.mean(valid_iou)
                 model.save(os.path.join(workspace, fff[fold_]) + "/epoch%03d_model" % epoch)

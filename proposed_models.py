@@ -186,7 +186,7 @@ class proposed_net:
 
     def build_model(self):
         if self.mode == 0:  # Unet (mode0)
-            # enc_conv1_1 = self.conv_bn_act(self.input, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_1")
+            ## enc_conv1_1 = self.conv_bn_act(self.input, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_1")
             # enc_conv1_2 = self.conv_bn_act(enc_conv1_1, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_2")
             # enc_pool1 = layers.maxpool(k=2, s=2, p="same", name="enc_pool1")(enc_conv1_2)
             #
@@ -228,7 +228,8 @@ class proposed_net:
             # dec_out = self.conv_bn_act(dec_conv1_2, 1, k=1, s=1, p="same", batch=False, act=False, n="dec_out")
             # dec_out = tf.sigmoid(dec_out)
 
-            # double-skip Unet (mode00)
+
+            ## double-skip Unet (mode00)
             # enc_conv1_1 = self.conv_bn_act(self.input, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_1")
             # enc_conv1_2 = self.conv_bn_act(enc_conv1_1, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_2")
             # enc_pool1 = layers.maxpool(k=2, s=2, p="same", name="enc_pool1")(enc_conv1_2)
@@ -275,6 +276,7 @@ class proposed_net:
             # dec_out = self.conv_bn_act(dec_conv1_2, 1, k=1, s=1, p="same", batch=False, act=False, n="dec_out")
             # dec_out = tf.sigmoid(dec_out)
 
+
             # up-sampling Unet (mode000)
             enc_conv1_1 = self.conv_bn_act(self.input, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_1")
             enc_conv1_2 = self.conv_bn_act(enc_conv1_1, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_2")
@@ -317,6 +319,109 @@ class proposed_net:
 
             dec_out = self.conv_bn_act(dec_conv1_2, 1, k=1, s=1, p="same", batch=False, act=False, n="dec_out")
             dec_out = tf.sigmoid(dec_out)
+
+            # # double-skip + up-sampling Unet (mode0000)
+            # enc_conv1_1 = self.conv_bn_act(self.input, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_1")
+            # enc_conv1_2 = self.conv_bn_act(enc_conv1_1, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_2")
+            # enc_pool1 = layers.maxpool(k=2, s=2, p="same", name="enc_pool1")(enc_conv1_2)
+            #
+            # enc_conv2_1 = self.conv_bn_act(enc_pool1, f=self.ch * 2, k=3, s=1, p="same", act=True, n="enc_conv2_1")
+            # enc_conv2_2 = self.conv_bn_act(enc_conv2_1, f=self.ch * 2, k=3, s=1, p="same", act=True, n="enc_conv2_2")
+            # enc_pool2 = layers.maxpool(k=2, s=2, p="same", name="enc_pool2")(enc_conv2_2)
+            #
+            # enc_conv3_1 = self.conv_bn_act(enc_pool2, f=self.ch * 4, k=3, s=1, p="same", act=True, n="enc_conv3_1")
+            # enc_conv3_2 = self.conv_bn_act(enc_conv3_1, f=self.ch * 4, k=3, s=1, p="same", act=True, n="enc_conv3_2")
+            # enc_pool3 = layers.maxpool(k=2, s=2, p="same", name="enc_pool3")(enc_conv3_2)
+            #
+            # enc_conv4_1 = self.conv_bn_act(enc_pool3, f=self.ch * 8, k=3, s=1, p="same", act=True, n="enc_conv4_1")
+            # enc_conv4_2 = self.conv_bn_act(enc_conv4_1, f=self.ch * 8, k=3, s=1, p="same", act=True, n="enc_conv4_2")
+            # enc_pool4 = layers.maxpool(k=2, s=2, p="same", name="enc_pool4")(enc_conv4_2)
+            #
+            # enc_conv5_1 = self.conv_bn_act(enc_pool4, f=self.ch * 16, k=3, s=1, p="same", act=True, n="enc_conv5_1")
+            # enc_conv5_2 = self.conv_bn_act(enc_conv5_1, f=self.ch * 16, k=3, s=1, p="same", act=True, n="enc_conv5_2")
+            #
+            # up_conv4 = layers.upsample(rank=2, s=2, name="up4")(enc_conv5_2)
+            # concat4_1 = self.concat(enc_conv4_2, up_conv4, "concat4_1")
+            # dec_conv4_1 = self.conv_bn_act(concat4_1, f=self.ch*8, k=3, s=1, p="same", act=True, n="dec_conv4_1")
+            # concat4_2 = self.concat(enc_conv4_2, dec_conv4_1, "concat4_2")
+            # dec_conv4_2 = self.conv_bn_act(concat4_2, f=self.ch*8, k=3, s=1, p="same", act=True, n="dec_conv4_2")
+            #
+            # up_conv3 = layers.upsample(rank=2, s=2, name="up3")(dec_conv4_2)
+            # concat3_1 = self.concat(enc_conv3_2, up_conv3, "concat3_1")
+            # dec_conv3_1 = self.conv_bn_act(concat3_1, f=self.ch*4, k=3, s=1, p="same", act=True, n="dec_conv3_1")
+            # concat3_2 = self.concat(enc_conv3_2, dec_conv3_1, "concat3_2")
+            # dec_conv3_2 = self.conv_bn_act(concat3_2, f=self.ch*4, k=3, s=1, p="same", act=True, n="dec_conv3_2")
+            #
+            # up_conv2 = layers.upsample(rank=2, s=2, name="up2")(dec_conv3_2)
+            # concat2_1 = self.concat(enc_conv2_2, up_conv2, "concat2_1")
+            # dec_conv2_1 = self.conv_bn_act(concat2_1, f=self.ch*2, k=3, s=1, p="same", act=True, n="dec_conv2_1")
+            # concat2_2 = self.concat(enc_conv2_2, dec_conv2_1, "concat2_2")
+            # dec_conv2_2 = self.conv_bn_act(concat2_2, f=self.ch*2, k=3, s=1, p="same", act=True, n="dec_conv2_2")
+            #
+            # up_conv1 = layers.upsample(rank=2, s=2, name="up1")( dec_conv2_2)
+            # concat1_1 = self.concat(enc_conv1_2, up_conv1, "concat1_1")
+            # dec_conv1_1 = self.conv_bn_act(concat1_1, self.ch, k=3, s=1, p="same", act=True, n="dec_conv1_1")
+            # concat1_2 = self.concat(enc_conv1_2, dec_conv1_1, "concat1_2")
+            # dec_conv1_2 = self.conv_bn_act(concat1_2, self.ch, k=3, s=1, p="same", act=True, n="dec_conv1_2")
+            #
+            # dec_out = self.conv_bn_act(dec_conv1_2, 1, k=1, s=1, p="same", batch=False, act=False, n="dec_out")
+            # dec_out = tf.sigmoid(dec_out)
+
+            # dropout + double-skip + up-sampling Unet (mode00000)
+            # enc_conv1_1 = self.conv_bn_act(self.input, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_1")
+            # enc_drop1 = layers.dropout(rate=0.1, name="enc_drop1")(enc_conv1_1)
+            # enc_conv1_2 = self.conv_bn_act(enc_drop1, f=self.ch, k=3, s=1, p="same", act=True, n="enc_conv1_2")
+            # enc_pool1 = layers.maxpool(k=2, s=2, p="same", name="enc_pool1")(enc_conv1_2)
+            #
+            # enc_conv2_1 = self.conv_bn_act(enc_pool1, f=self.ch * 2, k=3, s=1, p="same", act=True, n="enc_conv2_1")
+            # enc_drop2 = layers.dropout(rate=0.1, name="enc_drop2")(enc_conv2_1)
+            # enc_conv2_2 = self.conv_bn_act(enc_drop2, f=self.ch * 2, k=3, s=1, p="same", act=True, n="enc_conv2_2")
+            # enc_pool2 = layers.maxpool(k=2, s=2, p="same", name="enc_pool2")(enc_conv2_2)
+            #
+            # enc_conv3_1 = self.conv_bn_act(enc_pool2, f=self.ch * 4, k=3, s=1, p="same", act=True, n="enc_conv3_1")
+            # enc_drop3 = layers.dropout(rate=0.1, name="enc_drop3")(enc_conv3_1)
+            # enc_conv3_2 = self.conv_bn_act(enc_drop3, f=self.ch * 4, k=3, s=1, p="same", act=True, n="enc_conv3_2")
+            # enc_pool3 = layers.maxpool(k=2, s=2, p="same", name="enc_pool3")(enc_conv3_2)
+            #
+            # enc_conv4_1 = self.conv_bn_act(enc_pool3, f=self.ch * 8, k=3, s=1, p="same", act=True, n="enc_conv4_1")
+            # enc_drop4 = layers.dropout(rate=0.1, name="enc_drop4")(enc_conv4_1)
+            # enc_conv4_2 = self.conv_bn_act(enc_drop4, f=self.ch * 8, k=3, s=1, p="same", act=True, n="enc_conv4_2")
+            # enc_pool4 = layers.maxpool(k=2, s=2, p="same", name="enc_pool4")(enc_conv4_2)
+            #
+            # enc_conv5_1 = self.conv_bn_act(enc_pool4, f=self.ch * 16, k=3, s=1, p="same", act=True, n="enc_conv5_1")
+            # enc_drop5 = layers.dropout(rate=0.1, name="enc_drop5")(enc_conv5_1)
+            # enc_conv5_2 = self.conv_bn_act(enc_drop5, f=self.ch * 16, k=3, s=1, p="same", act=True, n="enc_conv5_2")
+            #
+            # up_conv4 = layers.upsample(rank=2, s=2, name="up4")(enc_conv5_2)
+            # concat4_1 = self.concat(enc_conv4_2, up_conv4, "concat4_1")
+            # dec_conv4_1 = self.conv_bn_act(concat4_1, f=self.ch*8, k=3, s=1, p="same", act=True, n="dec_conv4_1")
+            # dec_drop4 = layers.dropout(rate=0.1, name="dec_drop4")(dec_conv4_1)
+            # concat4_2 = self.concat(enc_conv4_2, dec_drop4, "concat4_2")
+            # dec_conv4_2 = self.conv_bn_act(concat4_2, f=self.ch*8, k=3, s=1, p="same", act=True, n="dec_conv4_2")
+            #
+            # up_conv3 = layers.upsample(rank=2, s=2, name="up3")(dec_conv4_2)
+            # concat3_1 = self.concat(enc_conv3_2, up_conv3, "concat3_1")
+            # dec_conv3_1 = self.conv_bn_act(concat3_1, f=self.ch*4, k=3, s=1, p="same", act=True, n="dec_conv3_1")
+            # dec_drop3 = layers.dropout(rate=0.1, name="dec_drop3")(dec_conv3_1)
+            # concat3_2 = self.concat(enc_conv3_2, dec_drop3, "concat3_2")
+            # dec_conv3_2 = self.conv_bn_act(concat3_2, f=self.ch*4, k=3, s=1, p="same", act=True, n="dec_conv3_2")
+            #
+            # up_conv2 = layers.upsample(rank=2, s=2, name="up2")(dec_conv3_2)
+            # concat2_1 = self.concat(enc_conv2_2, up_conv2, "concat2_1")
+            # dec_conv2_1 = self.conv_bn_act(concat2_1, f=self.ch*2, k=3, s=1, p="same", act=True, n="dec_conv2_1")
+            # dec_drop2 = layers.dropout(rate=0.1, name="dec_drop2")(dec_conv2_1)
+            # concat2_2 = self.concat(enc_conv2_2, dec_drop2, "concat2_2")
+            # dec_conv2_2 = self.conv_bn_act(concat2_2, f=self.ch*2, k=3, s=1, p="same", act=True, n="dec_conv2_2")
+            #
+            # up_conv1 = layers.upsample(rank=2, s=2, name="up1")( dec_conv2_2)
+            # concat1_1 = self.concat(enc_conv1_2, up_conv1, "concat1_1")
+            # dec_conv1_1 = self.conv_bn_act(concat1_1, self.ch, k=3, s=1, p="same", act=True, n="dec_conv1_1")
+            # dec_drop1 = layers.dropout(rate=0.1, name="dec_drop1")(dec_conv1_1)
+            # concat1_2 = self.concat(enc_conv1_2, dec_drop1, "concat1_2")
+            # dec_conv1_2 = self.conv_bn_act(concat1_2, self.ch, k=3, s=1, p="same", act=True, n="dec_conv1_2")
+            #
+            # dec_out = self.conv_bn_act(dec_conv1_2, 1, k=1, s=1, p="same", batch=False, act=False, n="dec_out")
+            # dec_out = tf.sigmoid(dec_out)
 
             return keras.Model({"in": self.input}, {"out": dec_out}, name="model")
 
